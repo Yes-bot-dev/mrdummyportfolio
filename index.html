@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MrDummy's Portfolio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+:root{
+    --bg:#0b0b0e;
+    --panel:#16161d;
+    --accent:#facc15;
+    --accent-soft:rgba(250,204,21,.35);
+    --text-soft:#b8b8c3;
+    --ease-roblox:cubic-bezier(.2,.9,.3,1.4);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+
+body{
+    font-family:Poppins,sans-serif;
+    color:white;
+    background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(250,204,21,.08), transparent),
+        radial-gradient(800px 400px at 90% 10%, rgba(96,165,250,.06), transparent),
+        linear-gradient(180deg,#0b0b0e,#08080c);
+    overflow-x:hidden;
+}
+
+/* shader glow */
+body::before{
+    content:'';
+    position:fixed;
+    inset:-50%;
+    background:conic-gradient(
+        transparent,
+        rgba(250,204,21,.08),
+        transparent,
+        rgba(96,165,250,.06),
+        transparent
+    );
+    animation:spinGlow 24s linear infinite;
+    z-index:-2;
+}
+@keyframes spinGlow{to{transform:rotate(360deg)}}
+
+/* grain */
+body::after{
+    content:'';
+    position:fixed;
+    inset:0;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+    pointer-events:none;
+    z-index:-1;
+}
+
+/* particles */
+#particles{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+}
+
+/* ===== TOOLTIPS ===== */
+[data-tip]{
+    position:relative;
+}
+[data-tip]::after{
+    content:attr(data-tip);
+    position:absolute;
+    bottom:-38px;
+    left:50%;
+    transform:translateX(-50%) translateY(6px);
+    background:#1b1b26;
+    color:white;
+    font-size:.75rem;
+    padding:6px 10px;
+    border-radius:8px;
+    white-space:nowrap;
+    opacity:0;
+    pointer-events:none;
+    transition:.25s ease;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+[data-tip]:hover::after{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+/* nav */
+.nav{
+    position:fixed;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(20,20,28,.7);
+    backdrop-filter:blur(14px);
+    border-radius:999px;
+    padding:10px 22px;
+    display:flex;
+    gap:18px;
+    z-index:100;
+    box-shadow:0 10px 40px rgba(0,0,0,.5);
+}
+.nav button{
+    background:none;
+    border:none;
+    color:#aaa;
+    font-size:1.15rem;
+    padding:10px;
+    border-radius:50%;
+    cursor:pointer;
+    transition:.35s var(--ease-roblox);
+}
+.nav button:hover{transform:translateY(-3px)}
+.nav button.active{
+    background:var(--accent);
+    color:black;
+}
+
+/* layout */
+.wrapper{
+    display:grid;
+    grid-template-columns:340px 1fr;
+    gap:70px;
+    padding:140px 90px 90px;
+}
+
+/* sidebar */
+.profile{
+    background:linear-gradient(180deg,#ffffff,#f3f3f3);
+    color:black;
+    border-radius:26px;
+    padding:28px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+.portrait{
+    height:260px;
+    border-radius:18px;
+    background:linear-gradient(135deg,var(--accent),#333);
+}
+
+/* pages */
+.page{display:none}
+.page.active{
+    display:block;
+    animation:pageIn .7s var(--ease-roblox);
+}
+@keyframes pageIn{
+    from{opacity:0;transform:translateY(24px) scale(.98)}
+    to{opacity:1;transform:none}
+}
+
+/* home */
+.hero h1{
+    font-size:4.6rem;
+    line-height:.95;
+}
+.hero .ghost{
+    color:#1d1d28;
+    text-shadow:0 0 40px rgba(250,204,21,.15);
+}
+.letter{
+    max-width:720px;
+    font-size:1.05rem;
+    line-height:1.8;
+    color:var(--text-soft);
+}
+
+/* stats */
+.stats{
+    display:flex;
+    gap:40px;
+    margin:36px 0;
+}
+.stat h3{font-size:2.6rem;margin:0}
+
+/* cards */
+.tiles,.projects,.services,.modules{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:24px;
+    margin-top:40px;
+}
+.tile,.project,.service-card,.module-card{
+    background:linear-gradient(180deg,#1b1b26,#14141c);
+    border-radius:22px;
+    padding:26px;
+    cursor:pointer;
+    transition:.4s var(--ease-roblox);
+    box-shadow:0 20px 40px rgba(0,0,0,.45);
+}
+.tile:hover,.project:hover,.service-card:hover,.module-card:hover{
+    transform:translateY(-12px) scale(1.04);
+    box-shadow:0 30px 70px rgba(0,0,0,.7);
+}
+
+/* mobile */
+@media(max-width:900px){
+    .wrapper{grid-template-columns:1fr;padding:120px 26px}
+    .hero h1{font-size:3.2rem}
+}
+</style>
+</head>
+
+<body>
+<canvas id="particles"></canvas>
+
+<!-- NAV -->
+<div class="nav">
+    <button data-page="home" class="active" data-tip="Home"><i class="fa-solid fa-house"></i></button>
+    <button data-page="projects" data-tip="Projects"><i class="fa-solid fa-folder"></i></button>
+    <button data-page="services" data-tip="Services"><i class="fa-solid fa-screwdriver-wrench"></i></button>
+    <button data-page="modules" data-tip="Modules"><i class="fa-solid fa-cubes"></i></button>
+    <button data-page="contact" data-tip="Contact"><i class="fa-solid fa-envelope"></i></button>
+</div>
+
+<div class="wrapper">
+
+<!-- SIDEBAR -->
+<aside class="profile">
+    <div>
+        <div class="portrait"></div>
+        <h2>Mr Dummy</h2>
+        <p>Roblox Developer — systems, polish, intention.</p>
+    </div>
+    <div>
+        <i class="fa-brands fa-discord"></i>
+        <i class="fa-brands fa-github"></i>
+        <i class="fa-brands fa-youtube"></i>
+    </div>
+</aside>
+
+<section>
+
+<!-- HOME -->
+<div id="home" class="page active hero">
+    <h1>ROBLOX<br><span class="ghost">DEVELOPER</span></h1>
+
+    <div class="letter">
+        <p>I build Roblox systems meant to survive updates, scale with players, and stay readable for developers.</p>
+        <p>My work focuses on <strong>clarity</strong>, <strong>motion</strong>, and <strong>long-term maintainability</strong>.</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat"><h3>5+</h3><span>Years</span></div>
+        <div class="stat"><h3>24+</h3><span>Projects</span></div>
+        <div class="stat"><h3>126+</h3><span>Clients</span></div>
+    </div>
+</div>
+
+<!-- PROJECTS -->
+<div id="projects" class="page">
+    <h2>Projects</h2>
+    <div class="projects">
+        <div class="project">Advanced Round System</div>
+        <div class="project">Animated UI Framework</div>
+    </div>
+</div>
+
+<!-- SERVICES -->
+<div id="services" class="page">
+    <h2>Services</h2>
+    <div class="services">
+        <div class="service-card">
+            <h3>System Architecture</h3>
+            <p>Round systems, inventories, data pipelines, and scalable game logic.</p>
+        </div>
+        <div class="service-card">
+            <h3>Game Development</h3>
+            <p>Long-term or short-term development with clean handoff and documentation.</p>
+        </div>
+        <div class="service-card">
+            <h3>UI & UX Polish</h3>
+            <p>Motion-driven interfaces that feel intentional and responsive.</p>
+        </div>
+    </div>
+</div>
+
+<!-- MODULES -->
+<div id="modules" class="page">
+    <h2>Modules</h2>
+    <div class="modules">
+        <div class="module-card">
+            <h3>Round Manager</h3>
+            <p>State-driven round flow with extensible phases.</p>
+        </div>
+        <div class="module-card">
+            <h3>DataStore Wrapper</h3>
+            <p>Session-safe saving with retries and versioning.</p>
+        </div>
+        <div class="module-card">
+            <h3>UI Animation Engine</h3>
+            <p>Centralized tweens using Roblox-style motion curves.</p>
+        </div>
+    </div>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="page">
+    <p><i class="fa-brands fa-discord"></i> discord.gg/3QnBcCKEtF</p>
+    <p><i class="fa-solid fa-coins"></i> Payment: Bobux</p>
+</div>
+
+</section>
+</div>
+
+<script>
+/* nav logic (safe + scalable) */
+const pages=document.querySelectorAll(".page");
+document.querySelectorAll(".nav button").forEach(btn=>{
+    btn.onclick=()=>{
+        pages.forEach(p=>p.classList.remove("active"));
+        document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+        document.getElementById(btn.dataset.page).classList.add("active");
+        btn.classList.add("active");
+    };
+});
+
+/* particles */
+const c=document.getElementById("particles"),ctx=c.getContext("2d");
+let w,h,pts=[];
+function resize(){w=c.width=innerWidth;h=c.height=innerHeight}
+resize();window.onresize=resize;
+
+for(let i=0;i<90;i++){
+    pts.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,v:Math.random()*0.4+0.1});
+}
+(function loop(){
+    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle="rgba(250,204,21,.45)";
+    pts.forEach(p=>{
+        p.y+=p.v;if(p.y>h)p.y=0;
+        ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+    });
+    requestAnimationFrame(loop);
+})();
+</script>
+
+</body>
+</html>
