@@ -202,6 +202,24 @@ body::after{
     box-shadow:0 30px 70px rgba(0,0,0,.7);
 }
 
+.socials{
+    display:flex;
+    gap:16px;
+    margin-top:18px;
+}
+
+.socials a{
+    color:black;
+    font-size:1.5rem;
+    text-decoration:none;
+    transition:.3s var(--ease-roblox);
+}
+
+.socials a:hover{
+    transform:translateY(-4px) scale(1.1);
+    color:var(--accent);
+}
+
 /* mobile */
 @media(max-width:900px){
     .wrapper{grid-template-columns:1fr;padding:120px 26px}
@@ -231,11 +249,17 @@ body::after{
         <h2>Mr Dummy</h2>
         <p>Roblox Developer — systems, polish, intention.</p>
     </div>
-    <div>
+    <div class="socials">
+    <a href="https://discord.gg/3QnBcCKEtF" target="_blank" data-tip="Discord">
         <i class="fa-brands fa-discord"></i>
+    </a>
+    <a href="https://github.com/YourUsername" target="_blank" data-tip="GitHub">
         <i class="fa-brands fa-github"></i>
+    </a>
+    <a href="https://youtube.com/@YourChannel" target="_blank" data-tip="YouTube">
         <i class="fa-brands fa-youtube"></i>
-    </div>
+    </a>
+</div>
 </aside>
 
 <section>
@@ -305,8 +329,14 @@ body::after{
 
 <!-- CONTACT -->
 <div id="contact" class="page">
-    <p><i class="fa-brands fa-discord"></i> discord.gg/3QnBcCKEtF</p>
-    <p><i class="fa-solid fa-coins"></i> Payment: Bobux</p>
+    <p>
+        <a href="https://discord.gg/3QnBcCKEtF" target="_blank">
+            <i class="fa-brands fa-discord"></i> discord.gg/3QnBcCKEtF
+        </a>
+    </p>
+    <p>
+        <i class="fa-solid fa-coins"></i> Payment: Bobux
+    </p>
 </div>
 
 </section>
